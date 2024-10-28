@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Корзина</title>
+{% endblock title %}
+
+{% block main_content %}
+    <div class="main-content">
+        <div class="content-block">
+            <h2>Ваша корзина</h2>
+
+            <!-- Отображение Flash-сообщений об успешной оплате -->
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <div class="cart-items">
+                {% if cart_items %}
+                    {% for item in cart_items %}
+                        <div class="cart-item">
+                            <a href="{{ url_for('product_detail', product_id=item.product_id) }}" class="cart-item-link">
+                                <form action="{{ url_for('remove_from_cart', product_id=item.product_id) }}"
+                                      method="post" style="display:inline;">
+                                    <button type="submit" class="remove-from-cart-btn"
+                                            style="background: none; border: none; cursor: pointer;">
+                                        <img src="{{ url_for('static', filename='delete_item_icon.png') }}"
+                                             alt="Удалить" class="remove-icon" style="width: 24px; height: 24px;">
+                                    </button>
+                                </form>
+                                <img src="{{ url_for('static', filename=item.title|replace(' ', '_')|lower ~ '.jpg') }}"
+                                     alt="{{ item.title }}" class="cart-item-image">
+                                <div class="cart-item-details">
+                                    <span class="cart-item-title">{{ item.title }}</span>
+                                    <span class="cart-item-price">{{ item.price }} ₽</span>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                    <div class="total-price">
+                        <h3>Итоговая стоимость: {{ total_price }} ₽</h3>
+                    </div>
+
+                    <form action="{{ url_for('checkout') }}" method="post">
+                        <button type="submit" class="checkout-button">Оплатить</button>
+                    </form>
+
+                {% else %}
+                    <p class="plain_text">Корзина пуста.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>{{ product.title }} - Каталог товаров</title>
+{% endblock title %}
+
+{% block main_content %}
+<div class="main-content">
+    <div class="content-block">
+        <div class="product-page">
+            <!-- Левая часть с крупным фото товара -->
+            <div class="product-image">
+                <img src="{{ url_for('static', filename=product.title|replace(' ', '_')|lower ~ '.jpg') }}"
+                     alt="{{ product.title }}" style="max-width: 100%; height: auto;">
+            </div>
+
+            <!-- Правая часть с информацией о товаре -->
+            <div class="product-details">
+                <h1>{{ product.title }}</h1>
+                <p class="product-price">Цена: <strong>{{ current_price if current_price else 'Нет в наличии' }} руб.</strong></p>
+                <p class="product-description">{{ product.description }}</p>
+            </div>
+        </div>
+
+        <div class="button-container-bordered">
+            <form action="{{ url_for('add_to_cart', product_id=product.product_id) }}" method="POST">
+                <button type="submit" class="add-to-cart-btn">Добавить в корзину</button>
+            </form>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                <ul class="flashes">
+                    {% for category, message in messages %}
+                        <p class="alert alert-{{ category }}">{{ message }}</p>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+    </div>
+</div>
+{% endblock main_content %}

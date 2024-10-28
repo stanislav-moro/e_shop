@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        {% block title %}{% endblock title %}
+    </head>
+
+    <body>
+        <header>
+            <div class="logo">
+                <a href="/" title="Переход на главную страницу">Мой Магазин</a>
+            </div>
+            <div class="search-bar">
+                <input type="text" placeholder="Поиск...">
+            </div>
+
+            <div class="icons">
+                <a href="{{ url_for('index') }}" class="index" title="Главная">
+                    <img src="/static/index_icon.png" style="width: 25px; height: auto;">
+                </a>
+                {% if 'user_id' in session %}
+                    <a href="{{ url_for('profile') }}" class="profile" title="Личный кабинет">
+                        <img src="/static/profile_icon.png" style="width: 25px; height: auto;">
+                    </a>
+                    <a href="{{ url_for('cart') }}" class="cart" title="Корзина">
+                        <img src="/static/cart_icon.png" style="width: 27px; height: auto;">
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="logout" title="Выйти">
+                        <img src="/static/exit_icon.png" style="width: 27px; height: auto;">
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="login" title="Войти">
+                        <img src="/static/enter_icon.png" style="width: 25px; height: auto;">
+                    </a>
+                {% endif %}
+            </div>
+
+        </header>
+
+        <!-- Основной контент (зафиксированный блок) -->
+        <div class="main-content">
+            {% block main_content %}{% endblock main_content %}
+        </div>
+
+        <footer>
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h4>Информация</h4>
+                    <ul>
+                        <li><a href="/about">О магазине</a></li>
+                        <li><a href="#">Доставка и оплата</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Программа лояльности</h4>
+                    <ul>
+                        <li><a href="#">Магазины</a></li>
+                        <li><a href="#">Вопрос-ответ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Блог</h4>
+                    <ul>
+                        <li><a href="#">Последние статьи</a></li>
+                        <li><a href="#">Рекомендации</a></li>
+                    </ul>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+    <title>Регистрация</title>
+{% endblock title %}
+
+{% block main_content %}
+<div class="main-content">
+    <div class="content-block">
+        <div class="auth-page">
+            <div class="form-container">
+
+                <!-- Отображение flash-сообщений -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <p class="alert alert-{{ category }}">{{ message }}</p>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <h2>Регистрация</h2>
+                <form action="{{ url_for('registration_page') }}" method="POST">
+                    <label for="first_name">Имя:</label>
+                    <input type="text" id="first_name" name="first_name" value="{{ request.form['first_name'] }}" required>
+
+                    <label for="last_name">Фамилия:</label>
+                    <input type="text" id="last_name" name="last_name" value="{{ request.form['last_name'] }}" required>
+
+                    <label for="phone">Телефон:</label>
+                    <input type="tel" id="phone" name="phone" value="{{ request.form['phone'] }}" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="{{ request.form['email'] }}" required>
+
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" name="password" required>
+
+                    <button type="submit">Зарегистрироваться</button>
+                </form>
+                <p>Уже есть аккаунт? <a href="{{ url_for('login_page') }}">Войти</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main_content %}

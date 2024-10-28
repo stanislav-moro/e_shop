@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Главная - Каталог товаров</title>
+{% endblock title %}
+
+{% block main_content %}
+    <div class="main-content">
+        <div class="content-block">
+            <h2>Каталог товаров</h2>
+            <div class="product-grid">
+                {% for product in products %}
+                <a href="{{ url_for('product_detail', product_id=product.product_id) }}" class="product-card">
+                    <div class="image-wrapper">
+                        <img src="{{ url_for('static', filename=product.title|replace(' ', '_')|lower ~ '.jpg') }}"
+                             alt="{{ product.title }}">
+                    </div>
+                    <h3>{{ product.title }}</h3>
+                    {% set current_price = product.price_histories | selectattr('end_date', 'equalto', None) | first %}
+                    <p>Цена: {{ current_price.price if current_price else '-' }} руб.</p>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock main_content %}
