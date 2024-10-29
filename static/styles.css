@@ -260,6 +260,32 @@ body {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Более глубокая тень */
 }
 
+.index-button-container-bordered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    border-radius: 8px;
+}
+
+.index-add-to-cart-btn {
+    width: 200px; /* Задаем фиксированную ширину */
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+.index-add-to-cart-btn:hover {
+    background-color: #0056b3;
+}
+
+
 /* ------------------------------------------------------------------------------------------- */
 /* Страница product */
 .product-page {
@@ -313,7 +339,6 @@ body {
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-
 }
 
 .add-to-cart-btn:hover {

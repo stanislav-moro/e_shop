@@ -8,17 +8,33 @@
     <div class="main-content">
         <div class="content-block">
             <h2>Каталог товаров</h2>
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for category, message in messages %}
+                            <p class="alert alert-{{ category }}">{{ message }}</p>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
             <div class="product-grid">
                 {% for product in products %}
-                <a href="{{ url_for('product_detail', product_id=product.product_id) }}" class="product-card">
-                    <div class="image-wrapper">
-                        <img src="{{ url_for('static', filename=product.title|replace(' ', '_')|lower ~ '.jpg') }}"
-                             alt="{{ product.title }}">
+                <div class="product-card">
+                    <a href="{{ url_for('product_detail', product_id=product.product_id) }}">
+                        <div class="image-wrapper">
+                            <img src="{{ url_for('static', filename=product.title|replace(' ', '_')|lower ~ '.jpg') }}"
+                                 alt="{{ product.title }}">
+                        </div>
+                        <h3>{{ product.title }}</h3>
+                        {% set current_price = product.price_histories | selectattr('end_date', 'equalto', None) | first %}
+                        <p>Цена: {{ current_price.price if current_price else '-' }} руб.</p>
+                    </a>
+                    <div class="index-button-container-bordered">
+                        <form action="{{ url_for('add_to_cart_inline', product_id=product.product_id) }}" method="POST">
+                            <button type="submit" class="index-add-to-cart-btn">Добавить в корзину</button>
+                        </form>
                     </div>
-                    <h3>{{ product.title }}</h3>
-                    {% set current_price = product.price_histories | selectattr('end_date', 'equalto', None) | first %}
-                    <p>Цена: {{ current_price.price if current_price else '-' }} руб.</p>
-                </a>
+                </div>
                 {% endfor %}
             </div>
         </div>

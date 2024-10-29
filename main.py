@@ -216,6 +216,31 @@ def add_to_cart(product_id):
     return redirect(url_for('product_detail', product_id=product_id))  # Исправленный маршрут
 
 
+@app.route('/add_to_cart_inline/<int:product_id>', methods=['POST'])
+def add_to_cart_inline(product_id):
+    if 'user_id' not in session:
+        flash('Сначала войдите в систему, чтобы добавить товар в корзину.', 'warning')
+        return redirect(url_for('login_page'))
+
+    user_id = session['user_id']
+    existing_item = db.session.execute(
+        text("SELECT * FROM cart WHERE customer_id = :customer_id AND product_id = :product_id"),
+        {'customer_id': user_id, 'product_id': product_id}
+    ).fetchone()
+
+    if existing_item:
+        flash('Этот товар уже добавлен в вашу корзину! Вы не можете добавить товар повторно!', 'danger')
+    else:
+        db.session.execute(
+            text("INSERT INTO cart (customer_id, product_id) VALUES (:customer_id, :product_id)"),
+            {'customer_id': user_id, 'product_id': product_id}
+        )
+        db.session.commit()
+        flash('Товар успешно добавлен в корзину!', 'success')
+
+    return redirect(url_for('index'))  # Остаемся на странице каталога
+
+
 @app.route('/remove_from_cart/<int:product_id>', methods=['POST'])
 def remove_from_cart(product_id):
     if 'user_id' not in session:
@@ -311,4 +336,4 @@ def profile():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, threaded=True)
+    app.run(debug=True, threaded=True)
